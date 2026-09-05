@@ -1,0 +1,175 @@
+# Smart dust collector — ESP32 scaffold
+# Docs: ../docs/  |  secrets: copy secrets.yaml.example → secrets.yaml
+
+substitutions:
+  device_name: dust-collector
+  friendly_name: Dust Collector
+  # Pins (ESP32 DevKit defaults — override as needed)
+  pin_relay: GPIO26
+  pin_gate1_servo: GPIO18
+  pin_ct_adc: GPIO34
+  pin_airflow_adc: GPIO35
+  purge_seconds: "15"
+  tool_on_threshold: "0.35"  # normalized ADC; calibrate on hardware
+
+esphome:
+  name: ${device_name}
+  friendly_name: ${friendly_name}
+  comment: "Smart dust collector controller (fork-local scaffold)"
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+logger:
+
+api:
+  encryption:
+    key: !secret api_encryption_key
+
+ota:
+  - platform: esphome
+    password: !secret ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  ap:
+    ssid: "${friendly_name} Fallback"
+    password: !secret fallback_ap_password
+
+captive_portal:
+
+# Optional MQTT — uncomment and fill secrets if not using native API only.
+# mqtt:
+#   broker: !secret mqtt_broker
+#   username: !secret mqtt_username
+#   password: !secret mqtt_password
+#   topic_prefix: workshop/dust
+
+output:
+  - platform: ledc
+    id: gate1_pwm
+    pin: ${pin_gate1_servo}
+    frequency: 50Hz
+
+servo:
+  - id: gate1_servo
+    output: gate1_pwm
+    auto_detach_time: 2s
+    transition_length: 750ms
+
+switch:
+  - platform: gpio
+    id: collector_relay
+    name: "Dust Collector Relay"
+    pin:
+      number: ${pin_relay}
+      inverted: false
+    restore_mode: ALWAYS_OFF
+    icon: mdi:fan
+    on_turn_on:
+      - text_sensor.template.publish:
+          id: collector_state
+          state: "COLLECTOR_ON"
+    on_turn_off:
+      - text_sensor.template.publish:
+          id: collector_state
+          state: "IDLE"
+
+number:
+  - platform: template
+    name: "Blast Gate 1 Open Percent"
+    id: blast_gate_1_open_percent
+    min_value: 0
+    max_value: 100
+    step: 1
+    optimistic: true
+    initial_value: 0
+    unit_of_measurement: "%"
+    icon: mdi:pipe-valve
+    set_action:
+      - servo.write:
+          id: gate1_servo
+          # Map 0–100% open → servo -100..+100 (calibrate endpoints on hardware)
+          level: !lambda "return (x / 50.0f) - 1.0f;"
+
+sensor:
+  - platform: adc
+    pin: ${pin_ct_adc}
+    id: tool_current_proxy
+    name: "Tool Current Proxy"
+    update_interval: 200ms
+    attenuation: 12db
+    filters:
+      - median:
+          window_size: 5
+          send_every: 2
+      - calibrate_linear:
+          # Replace with measured idle / loaded points
+          - 0.0 -> 0.0
+          - 3.3 -> 1.0
+
+  - platform: adc
+    pin: ${pin_airflow_adc}
+    id: airflow_proxy
+    name: "Airflow Proxy"
+    update_interval: 1s
+    attenuation: 12db
+    unit_of_measurement: "u"
+    icon: mdi:weather-windy
+    filters:
+      - sliding_window_moving_average:
+          window_size: 5
+          send_every: 1
+
+  # Optional PMS5003 — uncomment when wired (UART2 on 16/17 by default).
+  # - platform: pmsx003
+  #   type: PMSX003
+  #   pm_2_5:
+  #     name: "PM 2.5"
+  #   pm_10_0:
+  #     name: "PM 10"
+  # uart:
+  #   tx_pin: GPIO17
+  #   rx_pin: GPIO16
+  #   baud_rate: 9600
+
+binary_sensor:
+  - platform: template
+    name: "Tool CT Clamp"
+    id: tool_ct_clamp
+    device_class: power
+    lambda: |-
+      return id(tool_current_proxy).state > ${tool_on_threshold};
+    filters:
+      - delayed_on: 300ms
+      - delayed_off: 800ms
+    on_press:
+      - number.set:
+          id: blast_gate_1_open_percent
+          value: 100
+      - delay: 1s
+      - switch.turn_on: collector_relay
+    on_release:
+      - text_sensor.template.publish:
+          id: collector_state
+          state: "PURGE"
+      - delay: ${purge_seconds}s
+      - switch.turn_off: collector_relay
+      - number.set:
+          id: blast_gate_1_open_percent
+          value: 0
+
+text_sensor:
+  - platform: template
+    name: "Collector State"
+    id: collector_state
+    icon: mdi:state-machine
+    lambda: |-
+      if (id(collector_relay).state) {
+        return {"COLLECTOR_ON"};
+      }
+      return {"IDLE"};
+    update_interval: 5s
