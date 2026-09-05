@@ -15,10 +15,13 @@ TypeScript FSM (spec / tests): [`../control/`](../control/).
 
 ## Flash
 
+Full first-time instructions: [`../docs/flashing.md`](../docs/flashing.md)  
+Breadboard wiring: [`../docs/breadboard.md`](../docs/breadboard.md)
+
 ```bash
 cd smart-dust-collector/firmware
 cp esphome/secrets.yaml.example esphome/secrets.yaml
-# edit Wi-Fi (+ optional API key for OTA / status)
+# edit Wi-Fi (+ API key for OTA / status)
 
 esphome run esphome/dust-collector.yaml
 # or https://web.esphome.io

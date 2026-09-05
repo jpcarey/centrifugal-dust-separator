@@ -171,6 +171,32 @@ binary_sensor:
           id: blast_gate_1_open_percent
           value: 0
 
+  # TEMPORARY bring-up only — uncomment to simulate "tool on" with a button
+  # between 3V3 and GPIO23 (10k pulldown to GND). Delete/disable before
+  # enclosing the shop install so a stuck button cannot latch the collector.
+  # - platform: gpio
+  #   name: "Bring-up Tool Button"
+  #   id: bringup_tool_button
+  #   pin:
+  #     number: GPIO23
+  #     mode: INPUT_PULLDOWN
+  #     inverted: false
+  #   on_press:
+  #     - number.set:
+  #         id: blast_gate_1_open_percent
+  #         value: 100
+  #     - delay: 1s
+  #     - switch.turn_on: collector_relay
+  #   on_release:
+  #     - text_sensor.template.publish:
+  #         id: collector_state
+  #         state: "PURGE"
+  #     - delay: ${purge_seconds}s
+  #     - switch.turn_off: collector_relay
+  #     - number.set:
+  #         id: blast_gate_1_open_percent
+  #         value: 0
+
 text_sensor:
   - platform: template
     name: "Collector State"

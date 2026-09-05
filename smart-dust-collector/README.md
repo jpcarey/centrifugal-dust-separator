@@ -6,11 +6,13 @@ Fork-local project for instrumenting the MK2 centrifugal separator. Everything f
 
 | Path | Purpose |
 | ---- | ------- |
-| [`docs/`](docs/) | Plan, architecture, BOM, wiring, optional home integrations |
+| [`docs/`](docs/) | **Builder guides** (shopping → breadboard → flash → bring-up), plus architecture |
 | [`firmware/`](firmware/) | ESP32 / ESPHome scaffold (**on-device control**) |
 | [`control/`](control/) | TypeScript control state machine (spec / tests) |
 | [`hf-prototype/`](hf-prototype/) | Vite + TS audio → tool-class experiment |
 | [`tests/`](tests/) | Vitest coverage for FSM + classifier |
+
+**New to ESP32?** Start at [`docs/getting-started.md`](docs/getting-started.md) — ordered steps through shopping, breadboarding, flashing, and staged testing. No Home Assistant required.
 
 Upstream print files (MK2*, BT-100 jig, T-Loc Parts) are siblings of this directory — do not modify them for smart-collector work.
 
@@ -55,7 +57,12 @@ Optional home integrations are for status / remote override only. The HF audio p
 Details: [`docs/architecture.md`](docs/architecture.md).  
 Optional hubs: [`docs/optional-integrations.md`](docs/optional-integrations.md).
 
-## Quick start (host tools)
+## Quick start
+
+**Hardware path (collector control):**  
+[`docs/getting-started.md`](docs/getting-started.md) → shopping → flash → breadboard → bring-up checklist.
+
+**Host tools (optional TypeScript tests / audio experiment):**
 
 ```bash
 cd smart-dust-collector

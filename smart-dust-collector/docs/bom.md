@@ -2,6 +2,8 @@
 
 Quantities assume one collector and one active branch to start.
 
+For first-time buyers (tools, substitutions, CT burden notes), use the longer **[shopping-list.md](shopping-list.md)**.
+
 ## Electronics
 
 | Item | Qty | Example | Notes |
