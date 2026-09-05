@@ -1,5 +1,9 @@
 # Smart dust collector — ESP32 scaffold
 # Docs: ../docs/  |  secrets: copy secrets.yaml.example → secrets.yaml
+#
+# Reliability: tool→gate→relay→purge runs ON THIS DEVICE (see binary_sensor
+# on_press / on_release). Home Assistant / MQTT / Apple Home are optional and
+# must not own start/stop. Wi-Fi down should not stop shop auto-start.
 
 substitutions:
   device_name: dust-collector
@@ -24,6 +28,7 @@ esp32:
 
 logger:
 
+# Native API is optional (OTA / later Homebridge). Control does not depend on it.
 api:
   encryption:
     key: !secret api_encryption_key
@@ -41,7 +46,11 @@ wifi:
 
 captive_portal:
 
-# Optional MQTT — uncomment and fill secrets if not using native API only.
+# LAN status / manual override without Home Assistant or MQTT.
+web_server:
+  port: 80
+
+# Optional MQTT — leave commented unless you already run a broker.
 # mqtt:
 #   broker: !secret mqtt_broker
 #   username: !secret mqtt_username

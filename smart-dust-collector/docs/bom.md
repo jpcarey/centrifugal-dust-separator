@@ -29,7 +29,7 @@ Quantities assume one collector and one active branch to start.
 | Item | Notes |
 | ---- | ----- |
 | ESPHome 2024.x+ | [web.esphome.io](https://web.esphome.io/) or HA add-on |
-| Home Assistant | Optional but recommended |
+| Home hub (HA / Homebridge) | Optional — status only; not required for control |
 | Hugging Face Space | [`../hf-prototype/`](../hf-prototype/) |
 
 ## Rough budget (USD, hobby scale)

@@ -1,8 +1,10 @@
 # Firmware — Smart Dust Collector
 
-ESPHome configuration for the workshop dust-controller node. Companion docs: [`../docs/`](../docs/).
+ESPHome config for the workshop dust-controller node. Companion docs: [`../docs/`](../docs/).
 
-Control sequencing reference (TypeScript, host-tested): [`../control/`](../control/).
+**Critical path is on-device:** CT clamp → open gate → collector relay → purge → close gate. That logic is in this YAML and runs on the ESP32 with no hub required.
+
+TypeScript FSM (spec / tests): [`../control/`](../control/).
 
 ## Layout
 
@@ -16,22 +18,24 @@ Control sequencing reference (TypeScript, host-tested): [`../control/`](../contr
 ```bash
 cd smart-dust-collector/firmware
 cp esphome/secrets.yaml.example esphome/secrets.yaml
-# edit Wi-Fi + API keys
+# edit Wi-Fi (+ optional API key for OTA / status)
 
 esphome run esphome/dust-collector.yaml
-# or use https://web.esphome.io / Home Assistant ESPHome add-on
+# or https://web.esphome.io
 ```
 
-## Scaffold capabilities
+After Wi-Fi joins, open `http://dust-collector.local` (web server) for status. If Wi-Fi is down, CT-driven control still works.
 
-- Wi-Fi + ESPHome API (optional MQTT)
-- Collector SSR/relay switch
-- Blast gate 1 as 0–100% number → servo
-- CT-clamp ADC → binary “tool on”
-- Placeholder ADC airflow proxy
-- Text sensor for coarse state: `IDLE` / `COLLECTOR_ON` / `PURGE`
+## What the scaffold does on the ESP
 
-Multi-step sequencing beyond this YAML should live in Home Assistant (or later on-device using the TS FSM as the spec) until Phase 3. See [`../docs/home-assistant.md`](../docs/home-assistant.md).
+- CT ADC → binary “tool on”
+- Tool on → open blast gate 1 → turn relay on
+- Tool off → purge delay → relay off → close gate
+- Placeholder airflow ADC
+- Local web UI (no Home Assistant / MQTT required)
+- Optional ESPHome native API (for OTA / later Homebridge) — not used for start/stop ownership
+
+MQTT stays commented out. Optional phone hubs: [`../docs/optional-integrations.md`](../docs/optional-integrations.md).
 
 ## Tests (control FSM)
 

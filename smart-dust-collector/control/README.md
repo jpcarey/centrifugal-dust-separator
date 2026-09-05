@@ -1,8 +1,8 @@
 # Control FSM (TypeScript)
 
-Host-testable reference for dust-collector sequencing. ESPHome YAML implements a
-simpler on/off + purge path today; treat this module as the source of truth when
-moving richer logic on-device or into a Node/MQTT bridge.
+Host-testable reference for dust-collector sequencing. The ESPHome YAML already
+runs CT→gate→relay→purge on the ESP32; treat this module as the typed spec when
+extending that on-device logic. Do not move ownership of start/stop to a hub.
 
 ## API
 
@@ -19,5 +19,5 @@ States: `IDLE` → `GATE_OPENING` → `COLLECTOR_ON` → `PURGE` → `GATE_CLOSI
 ## Why TypeScript
 
 Chosen as the single host language for this fork: shared FSM + Vitest coverage +
-the HF audio UI (Vite), without a Python toolchain. Firmware stays ESPHome YAML /
-C++ on the ESP32.
+the HF audio experiment (Vite), without a Python toolchain. Firmware stays
+ESPHome YAML / C++ on the ESP32. Home Assistant is not part of the stack.
