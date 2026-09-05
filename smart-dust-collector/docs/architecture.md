@@ -42,7 +42,7 @@ IDLE ──(tool_on)──► GATE_OPENING ──► COLLECTOR_ON ──(tool_of
 | `GATE_CLOSING` | Close gate after purge |
 | `FAULT` | Low airflow while commanded on, or gate timeout → safe off |
 
-Reference implementation (host-testable): [`../firmware/src/state_machine.py`](../firmware/src/state_machine.py).
+Reference implementation (host-testable TypeScript): [`../control/src/stateMachine.ts`](../control/src/stateMachine.ts).
 
 ## ESPHome entities (scaffold)
 

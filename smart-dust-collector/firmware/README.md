@@ -1,6 +1,8 @@
-# Firmware (ESP32 / ESPHome)
+# Firmware — Smart Dust Collector
 
-All collector hardware firmware for this fork lives here.
+ESPHome configuration for the workshop dust-controller node. Companion docs: [`../docs/`](../docs/).
+
+Control sequencing reference (TypeScript, host-tested): [`../control/`](../control/).
 
 ## Layout
 
@@ -8,8 +10,6 @@ All collector hardware firmware for this fork lives here.
 | ---- | ------- |
 | [`esphome/dust-collector.yaml`](esphome/dust-collector.yaml) | Main ESPHome device config |
 | [`esphome/secrets.yaml.example`](esphome/secrets.yaml.example) | Copy → `secrets.yaml` (do not commit secrets) |
-| [`src/state_machine.py`](src/state_machine.py) | Reference control FSM (tested on host; port logic to HA / native later) |
-| [`.gitignore`](.gitignore) | Ignore `secrets.yaml` and build artifacts |
 
 ## Flash
 
@@ -31,11 +31,12 @@ esphome run esphome/dust-collector.yaml
 - Placeholder ADC airflow proxy
 - Text sensor for coarse state: `IDLE` / `COLLECTOR_ON` / `PURGE`
 
-Multi-step sequencing beyond this YAML should live in Home Assistant until Phase 3 moves it on-device. See [`../docs/home-assistant.md`](../docs/home-assistant.md).
+Multi-step sequencing beyond this YAML should live in Home Assistant (or later on-device using the TS FSM as the spec) until Phase 3. See [`../docs/home-assistant.md`](../docs/home-assistant.md).
 
-## Tests
+## Tests (control FSM)
 
 ```bash
 cd smart-dust-collector
-python3 -m pytest tests -q
+npm install
+npm test
 ```

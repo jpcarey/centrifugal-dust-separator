@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Dust Collector — Audio Prototype</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header>
+        <p class="eyebrow">Smart Dust Collector</p>
+        <h1>Tool audio prototype</h1>
+        <p class="lede">
+          Upload or record a short shop clip. Scores are a CPU heuristic scaffold
+          for a future Transformers.js model — not production control logic.
+        </p>
+      </header>
+
+      <section class="panel">
+        <label class="file">
+          <span>Audio file</span>
+          <input id="file" type="file" accept="audio/*" />
+        </label>
+        <div class="row">
+          <button id="mic" type="button">Record 2s from mic</button>
+          <button id="classify" type="button" class="primary" disabled>Classify</button>
+        </div>
+        <p id="status" class="status" aria-live="polite"></p>
+      </section>
+
+      <section class="panel">
+        <h2>Class scores</h2>
+        <p id="summary" class="summary"></p>
+        <ul id="scores" class="scores"></ul>
+      </section>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

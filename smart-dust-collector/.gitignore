@@ -1,9 +1,13 @@
+node_modules/
+dist/
+.vite/
+coverage/
+*.tsbuildinfo
 __pycache__/
-*.py[cod]
 .pytest_cache/
 .venv/
 venv/
 firmware/esphome/secrets.yaml
 firmware/.esphome/
-*.egg-info/
 .DS_Store
+hf-prototype/dist/

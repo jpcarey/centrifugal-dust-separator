@@ -2,12 +2,15 @@
 
 Fork-local project for instrumenting the MK2 centrifugal separator. Everything for this effort lives **under this folder** so upstream CAD/print files stay untouched and `git pull` from the parent repo stays clean.
 
+**Host language: TypeScript** (control FSM, tests, HF audio UI). Firmware on the ESP32 stays **ESPHome YAML** (C++ under the hood) — no Python toolchain required.
+
 | Path | Purpose |
 | ---- | ------- |
 | [`docs/`](docs/) | Plan, architecture, BOM, wiring, Home Assistant |
 | [`firmware/`](firmware/) | ESP32 / ESPHome scaffold |
-| [`hf-prototype/`](hf-prototype/) | Hugging Face Gradio audio → tool-class prototype |
-| [`tests/`](tests/) | Host-side unit tests for the control state machine |
+| [`control/`](control/) | TypeScript control state machine |
+| [`hf-prototype/`](hf-prototype/) | Vite + TS audio → tool-class prototype |
+| [`tests/`](tests/) | Vitest coverage for FSM + classifier |
 
 Upstream print files (MK2*, BT-100 jig, T-Loc Parts) are siblings of this directory — do not modify them for smart-collector work.
 
@@ -39,6 +42,15 @@ Upstream print files (MK2*, BT-100 jig, T-Loc Parts) are siblings of this direct
 
 Details: [`docs/architecture.md`](docs/architecture.md).
 
+## Quick start (host tools)
+
+```bash
+cd smart-dust-collector
+npm install
+npm test
+npm run dev:hf    # audio prototype at http://localhost:5173
+```
+
 ## Phased plan
 
 | Phase | Deliverable | Status |
@@ -47,7 +59,7 @@ Details: [`docs/architecture.md`](docs/architecture.md).
 | 1 | ESPHome: relay + 1 gate + CT + HA entities | Firmware scaffold |
 | 2 | Airflow telemetry (BT-100 / ΔP) | Planned |
 | 3 | Multi-gate + tool map + purge timers | Planned |
-| 4 | HF audio prototype → optional edge assist | HF scaffold |
+| 4 | HF audio prototype → optional edge assist | TS / Vite scaffold |
 | 5 | Filter-clog heuristics + HA dashboard | Planned |
 
 ## Safety

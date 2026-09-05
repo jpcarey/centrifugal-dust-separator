@@ -1,7 +1,0 @@
-gradio>=4.44.0
-numpy>=1.26.0
-soundfile>=0.12.1
-librosa>=0.10.2
-# Optional: uncomment for real HF pipeline inference
-# transformers>=4.44.0
-# torch>=2.2.0

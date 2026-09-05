@@ -1,0 +1,124 @@
+:root {
+  color-scheme: light;
+  --ink: #1c1917;
+  --muted: #57534e;
+  --bg0: #f5f0e8;
+  --bg1: #e7dfd2;
+  --accent: #0f766e;
+  --accent-ink: #f8fafc;
+  --line: #d6d3d1;
+  --panel: rgba(255, 252, 247, 0.86);
+  font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 12% 10%, #fde68a55, transparent 36%),
+    radial-gradient(circle at 88% 0%, #99f6e455, transparent 32%),
+    linear-gradient(160deg, var(--bg0), var(--bg1));
+}
+
+.page {
+  width: min(720px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 3rem 0 4rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+h1 {
+  margin: 0 0 0.6rem;
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  line-height: 1.15;
+}
+
+.lede,
+.status,
+.summary {
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.panel {
+  margin-top: 1.25rem;
+  padding: 1.1rem 1.2rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(6px);
+}
+
+.file {
+  display: grid;
+  gap: 0.4rem;
+  font-weight: 600;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.9rem;
+}
+
+button {
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  padding: 0.55rem 0.9rem;
+  font: inherit;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.scores {
+  list-style: none;
+  margin: 0.8rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.scores li {
+  display: grid;
+  grid-template-columns: 8.5rem 1fr 3rem;
+  gap: 0.6rem;
+  align-items: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.bar {
+  height: 0.55rem;
+  background: #e7e5e4;
+  overflow: hidden;
+}
+
+.bar > span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #0f766e, #65a30d);
+  width: 0%;
+}
