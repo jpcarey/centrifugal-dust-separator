@@ -11,7 +11,8 @@ export default defineConfig({
     port: 5173,
   },
   build: {
-    outDir: path.join(root, "dist"),
+    // Keep artifacts inside hf-prototype/ (not the monorepo root)
+    outDir: "dist",
     emptyOutDir: true,
   },
 });
